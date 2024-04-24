@@ -44,11 +44,11 @@ test('Log in with invalid username', async ({page}) =>{
     const badUsername = 'timsmith'
     const password = 'SuperSecretPassword!'
 
-    // Verify the default state of the username field
+    // Verify the presence of the username field
     const usernameField = await page.locator('#username')    
     await expect(usernameField).toBeVisible()
 
-    // Verify the default state of the password field
+    // Verify the presence of the password field
     const passwordField = await page.locator('#password')
     await expect(passwordField).toBeVisible()
 
@@ -61,6 +61,8 @@ test('Log in with invalid username', async ({page}) =>{
     await expect(
         await page.locator("//div[@id='flash' and @class='flash error']"))
         .toContainText('Your username is invalid!')
+    
+    await page.close()
 })
 
 test('Log in with invalid password', async ({page}) =>{
@@ -69,11 +71,11 @@ test('Log in with invalid password', async ({page}) =>{
     const username = 'tomsmith'
     const badPassword = 'SuperSecretPasswurrrd'
 
-    // Verify the default state of the username field
+    // Verify the presence of the username field
     const usernameField = await page.locator('#username')    
     await expect(usernameField).toBeVisible()
 
-    // Verify the default state of the password field
+    // Verify the presence of the password field
     const passwordField = await page.locator('#password')
     await expect(passwordField).toBeVisible()
 
@@ -86,6 +88,8 @@ test('Log in with invalid password', async ({page}) =>{
     await expect(
         await page.locator("//div[@id='flash' and @class='flash error']"))
         .toContainText('Your password is invalid!')
+
+    await page.close()
 })
 
 test('Log in with invalid username and password', async ({page}) =>{
@@ -94,11 +98,11 @@ test('Log in with invalid username and password', async ({page}) =>{
     const badUsername = 'timsmith'
     const badPassword = 'SuperSecretPasswurrrd'
 
-    // Verify the default state of the username field
+    // Verify the presence of the username field
     const usernameField = await page.locator('#username')    
     await expect(usernameField).toBeVisible()
 
-    // Verify the default state of the password field
+    // Verify the presence of the password field
     const passwordField = await page.locator('#password')
     await expect(passwordField).toBeVisible()
 
@@ -111,4 +115,6 @@ test('Log in with invalid username and password', async ({page}) =>{
     await expect(
         await page.locator("//div[@id='flash' and @class='flash error']"))
         .toContainText('Your username is invalid!')
+
+    await page.close()
 })
