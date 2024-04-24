@@ -1,6 +1,6 @@
 const {test, expect} = require('@playwright/test')
 
-test('Login Positive test', async ({page}) =>{
+test('Log in and log out - positive test', async ({page}) =>{
     await page.goto('https://the-internet.herokuapp.com/login')
 
     const username = 'tomsmith'
@@ -18,14 +18,22 @@ test('Login Positive test', async ({page}) =>{
     await expect(passwordField).toBeEmpty()
     await expect(passwordField).toBeEnabled()
 
+    // Log in
     await usernameField.fill(username)
     await passwordField.fill(password)
     await page.locator("//*[@id='login']/button").click()
 
-    // Add verification for logout button after login
+    // Verify login success
+    await expect(
+        await page.locator("//div[@id='flash' and @class='flash success']"))
+        .toContainText('You logged into a secure area!')
 
-    // Take out after debugging
-    await page.waitForTimeout(2000)
+    // Log out
+    await page.locator('.button.secondary.radius').click()
+
+    // Verify logout success
+    await expect(usernameField).toBeVisible()
+    await expect(passwordField).toBeVisible()
 
     await page.close()
 })
