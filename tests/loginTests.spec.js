@@ -1,6 +1,6 @@
 const {test, expect} = require('@playwright/test')
 
-test('Log in and log out - positive test', async ({page}) =>{
+test('Log in with valid credentials and log out', async ({page}) =>{
     await page.goto('https://the-internet.herokuapp.com/login')
 
     const username = 'tomsmith'
@@ -36,4 +36,33 @@ test('Log in and log out - positive test', async ({page}) =>{
     await expect(passwordField).toBeVisible()
 
     await page.close()
+})
+
+test('Login with invalid username', async ({page}) =>{
+    await page.goto('https://the-internet.herokuapp.com/login')
+
+    const badUsername = 'timsmith'
+    const password = 'SuperSecretPassword!'
+
+    // Verify the default state of the username field
+    const usernameField = await page.locator('#username')    
+    await expect(usernameField).toBeVisible()
+    await expect(usernameField).toBeEmpty()
+    await expect(usernameField).toBeEnabled()
+
+    // Verify the default state of the password field
+    const passwordField = await page.locator('#password')
+    await expect(passwordField).toBeVisible()
+    await expect(passwordField).toBeEmpty()
+    await expect(passwordField).toBeEnabled()
+
+    // Attempt bad log in
+    await usernameField.fill(badUsername)
+    await passwordField.fill(password)
+    await page.locator("//*[@id='login']/button").click()
+
+    // Verify login failure
+    await expect(
+        await page.locator("//div[@id='flash' and @class='flash error']"))
+        .toContainText('Your username is invalid!')
 })
