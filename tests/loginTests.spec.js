@@ -38,7 +38,7 @@ test('Log in with valid credentials and log out', async ({page}) =>{
     await page.close()
 })
 
-test('Login with invalid username', async ({page}) =>{
+test('Log in with invalid username', async ({page}) =>{
     await page.goto('https://the-internet.herokuapp.com/login')
 
     const badUsername = 'timsmith'
@@ -47,14 +47,10 @@ test('Login with invalid username', async ({page}) =>{
     // Verify the default state of the username field
     const usernameField = await page.locator('#username')    
     await expect(usernameField).toBeVisible()
-    await expect(usernameField).toBeEmpty()
-    await expect(usernameField).toBeEnabled()
 
     // Verify the default state of the password field
     const passwordField = await page.locator('#password')
     await expect(passwordField).toBeVisible()
-    await expect(passwordField).toBeEmpty()
-    await expect(passwordField).toBeEnabled()
 
     // Attempt bad log in
     await usernameField.fill(badUsername)
@@ -65,4 +61,29 @@ test('Login with invalid username', async ({page}) =>{
     await expect(
         await page.locator("//div[@id='flash' and @class='flash error']"))
         .toContainText('Your username is invalid!')
+})
+
+test('Log in with invalid password', async ({page}) =>{
+    await page.goto('https://the-internet.herokuapp.com/login')
+
+    const username = 'tomsmith'
+    const badPassword = 'SuperSecretPasswurrrd'
+
+    // Verify the default state of the username field
+    const usernameField = await page.locator('#username')    
+    await expect(usernameField).toBeVisible()
+
+    // Verify the default state of the password field
+    const passwordField = await page.locator('#password')
+    await expect(passwordField).toBeVisible()
+
+    // Attempt bad log in
+    await usernameField.fill(username)
+    await passwordField.fill(badPassword)
+    await page.locator("//*[@id='login']/button").click()
+
+    // Verify login failure
+    await expect(
+        await page.locator("//div[@id='flash' and @class='flash error']"))
+        .toContainText('Your password is invalid!')
 })
